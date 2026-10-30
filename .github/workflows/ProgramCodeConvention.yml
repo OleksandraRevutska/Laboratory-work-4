@@ -9,7 +9,6 @@ on:
 jobs:
   PythonLinter:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -18,4 +17,4 @@ jobs:
         run: python3 -m pip install flake8
 
       - name: Check Python Code Convention
-      run: flake8 ProgramCodeModified.py
+        run: flake8 ProgramCodeModified.py
