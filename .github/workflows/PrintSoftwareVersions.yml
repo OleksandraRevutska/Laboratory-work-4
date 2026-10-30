@@ -1,0 +1,38 @@
+
+name: Print Software Versions
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  PrintLanguageVersions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Python Version
+        run: python3 --version
+
+      - name: Print Dart Version
+        uses: dart-lang/setup-dart@v1
+
+      - name: Check Dart Version
+        run: dart --version
+
+      - name: Print FastAPI Version
+        run: |
+          python3 -m pip install fastapi
+          python3 -m pip show fastapi
+
+  PrintDBMSVersions:
+    runs-on: ubuntu-latest
+    needs: PrintLanguageVersions
+    steps:
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Print PostgreSQL Version
+        run: psql --version
