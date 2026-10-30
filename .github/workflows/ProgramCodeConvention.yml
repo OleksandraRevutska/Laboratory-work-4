@@ -1,0 +1,21 @@
+name: Program Code Convention
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  PythonLinter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Flake8
+        run: python3 -m pip install flake8
+
+      - name: Check Python Code Convention
+        run: flake8 ProgramCode.py
