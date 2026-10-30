@@ -12,25 +12,20 @@ CREATE TABLE users (
 -- 2. Гімнастична палиця
 CREATE TABLE sticks (
     stick_id INTEGER GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(100) NOT NULL,
+    stick_name VARCHAR(100) NOT NULL,
     description VARCHAR(255) NOT NULL,
 
     CONSTRAINT pk_sticks PRIMARY KEY (stick_id),
 
-    -- Регулярний вираз №1:
-    -- назва містить літери, цифри та пробіли
-    CONSTRAINT chk_stick_name
-        CHECK (
-            name ~ '^[А-Яа-яІіЇїЄєҐґA-Za-z0-9 ]+$'
-        ),
+    -- Назва містить літери, цифри та пробіли
+    CONSTRAINT chk_stick_name CHECK (
+        stick_name ~ '^[А-Яа-яІіЇїЄєҐґA-Za-z0-9 ]+$'
+    ),
 
-    -- Регулярний вираз №2:
-    -- опис містить літери, цифри,
-    -- пробіли та дозволені розділові знаки
-    CONSTRAINT chk_stick_description
-        CHECK (
-            description ~ '^[А-Яа-яІіЇїЄєҐґA-Za-z0-9 ,.!-]+$'
-        )
+    -- Опис містить дозволені символи
+    CONSTRAINT chk_stick_description CHECK (
+        description ~ '^[А-Яа-яІіЇїЄєҐґA-Za-z0-9 ,.!-]+$'
+    )
 );
 
 -- 3. Тренування
@@ -40,19 +35,15 @@ CREATE TABLE trainings (
     stick_id INTEGER NOT NULL,
     repetition_count INTEGER NOT NULL DEFAULT 0,
 
-    CONSTRAINT pk_trainings
-        PRIMARY KEY (training_id),
+    CONSTRAINT pk_trainings PRIMARY KEY (training_id),
 
-    CONSTRAINT fk_trainings_users
-        FOREIGN KEY (user_id)
-        REFERENCES users(user_id),
+    CONSTRAINT fk_trainings_users FOREIGN KEY (user_id)
+        REFERENCES users (user_id),
 
-    CONSTRAINT fk_trainings_sticks
-        FOREIGN KEY (stick_id)
-        REFERENCES sticks(stick_id),
+    CONSTRAINT fk_trainings_sticks FOREIGN KEY (stick_id)
+        REFERENCES sticks (stick_id),
 
-    CONSTRAINT chk_repetition_count
-        CHECK (repetition_count >= 0)
+    CONSTRAINT chk_repetition_count CHECK (repetition_count >= 0)
 );
 
 -- 4. Рух гімнастичної палиці
@@ -60,12 +51,10 @@ CREATE TABLE movements (
     movement_id INTEGER GENERATED ALWAYS AS IDENTITY,
     stick_id INTEGER NOT NULL,
 
-    CONSTRAINT pk_movements
-        PRIMARY KEY (movement_id),
+    CONSTRAINT pk_movements PRIMARY KEY (movement_id),
 
-    CONSTRAINT fk_movements_sticks
-        FOREIGN KEY (stick_id)
-        REFERENCES sticks(stick_id)
+    CONSTRAINT fk_movements_sticks FOREIGN KEY (stick_id)
+        REFERENCES sticks (stick_id)
 );
 
 -- 5. Параметри руху
@@ -75,23 +64,22 @@ CREATE TABLE movement_parameters (
     acceleration REAL NOT NULL,
     angular_velocity REAL NOT NULL,
 
-    CONSTRAINT pk_movement_parameters
-        PRIMARY KEY (parameters_id),
+    CONSTRAINT pk_movement_parameters PRIMARY KEY (parameters_id),
 
-    CONSTRAINT fk_parameters_movements
-        FOREIGN KEY (movement_id)
-        REFERENCES movements(movement_id),
+    CONSTRAINT fk_parameters_movements FOREIGN KEY (movement_id)
+        REFERENCES movements (movement_id),
 
-    CONSTRAINT uq_parameters_movement
-        UNIQUE (movement_id),
+    CONSTRAINT uq_parameters_movement UNIQUE (movement_id),
 
     -- Прискорення від -100 до 100 м/с²
-    CONSTRAINT chk_acceleration
-        CHECK (acceleration BETWEEN -100 AND 100),
+    CONSTRAINT chk_acceleration CHECK (
+        acceleration BETWEEN -100 AND 100
+    ),
 
     -- Кутова швидкість від -50 до 50 рад/с
-    CONSTRAINT chk_angular_velocity
-        CHECK (angular_velocity BETWEEN -50 AND 50)
+    CONSTRAINT chk_angular_velocity CHECK (
+        angular_velocity BETWEEN -50 AND 50
+    )
 );
 
 -- 6. Повторення
@@ -100,14 +88,11 @@ CREATE TABLE repetitions (
     training_id INTEGER NOT NULL,
     movement_id INTEGER NOT NULL,
 
-    CONSTRAINT pk_repetitions
-        PRIMARY KEY (repetition_id),
+    CONSTRAINT pk_repetitions PRIMARY KEY (repetition_id),
 
-    CONSTRAINT fk_repetitions_trainings
-        FOREIGN KEY (training_id)
-        REFERENCES trainings(training_id),
+    CONSTRAINT fk_repetitions_trainings FOREIGN KEY (training_id)
+        REFERENCES trainings (training_id),
 
-    CONSTRAINT fk_repetitions_movements
-        FOREIGN KEY (movement_id)
-        REFERENCES movements(movement_id)
+    CONSTRAINT fk_repetitions_movements FOREIGN KEY (movement_id)
+        REFERENCES movements (movement_id)
 );
