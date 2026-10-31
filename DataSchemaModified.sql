@@ -36,10 +36,10 @@ CREATE TABLE trainings (
     CONSTRAINT pk_trainings PRIMARY KEY (training_id),
 
     CONSTRAINT fk_trainings_users FOREIGN KEY (user_id)
-        REFERENCES users (user_id),
+    REFERENCES users (user_id),
 
     CONSTRAINT fk_trainings_sticks FOREIGN KEY (stick_id)
-        REFERENCES sticks (stick_id),
+    REFERENCES sticks (stick_id),
 
     CONSTRAINT chk_repetition_count CHECK (repetition_count >= 0)
 );
@@ -52,7 +52,7 @@ CREATE TABLE movements (
     CONSTRAINT pk_movements PRIMARY KEY (movement_id),
 
     CONSTRAINT fk_movements_sticks FOREIGN KEY (stick_id)
-        REFERENCES sticks (stick_id)
+    REFERENCES sticks (stick_id)
 );
 
 -- 5. Параметри руху
@@ -65,7 +65,7 @@ CREATE TABLE movement_parameters (
     CONSTRAINT pk_movement_parameters PRIMARY KEY (parameters_id),
 
     CONSTRAINT fk_parameters_movements FOREIGN KEY (movement_id)
-        REFERENCES movements (movement_id),
+    REFERENCES movements (movement_id),
 
     CONSTRAINT uq_parameters_movement UNIQUE (movement_id),
 
@@ -87,8 +87,8 @@ CREATE TABLE repetitions (
     CONSTRAINT pk_repetitions PRIMARY KEY (repetition_id),
 
     CONSTRAINT fk_repetitions_trainings FOREIGN KEY (training_id)
-        REFERENCES trainings (training_id),
+    REFERENCES trainings (training_id),
 
     CONSTRAINT fk_repetitions_movements FOREIGN KEY (movement_id)
-        REFERENCES movements (movement_id)
+    REFERENCES movements (movement_id)
 );
